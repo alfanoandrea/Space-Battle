@@ -11,6 +11,8 @@ pygame.mixer.init()
 sparo = pygame.mixer.Sound("sounds/shot.mp3")
 colonna_sonora = pygame.mixer.Sound("sounds/colonna_sonora.mp3")
 game_over_sound = pygame.mixer.Sound("sounds/game_over.mp3")
+menu_enter_sound = pygame.mixer.Sound("sounds/menu_enter.mp3")
+menu_exit_sound = pygame.mixer.Sound("sounds/menu_exit.mp3")
 
 WIDTH, HEIGHT = 800, 600
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -462,36 +464,106 @@ def game_over_screen(final_score):
 def pause_game():
     paused = True
     return_to_home = False
-    pause_font = pygame.font.SysFont("Arial", 48)
-    pause_text = pause_font.render("PAUSA", True, NEON_YELLOW)
-    cont_text = pygame.font.SysFont("Arial", 24).render("Premi P per continuare", True, WHITE)
-    home_text = pygame.font.SysFont("Arial", 24).render("Premi H o clicca 'Torna alla Home'", True, WHITE)
-    # Bottone per tornare alla home
-    button_rect = pygame.Rect(WIDTH // 2 - 100, HEIGHT // 2 + 100, 200, 50)
+    
+    # Carica un font personalizzato se disponibile
+    try:
+        title_font = pygame.font.Font("fonts/space_age.ttf", 72)
+        button_font = pygame.font.Font("fonts/space_age.ttf", 32)
+    except:
+        title_font = pygame.font.SysFont("Arial", 72, bold=True)
+        button_font = pygame.font.SysFont("Arial", 32, bold=True)
+    
+    # Effetti visivi
+    overlay = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
+    overlay.fill((0, 0, 0, 200))  # Sfondo semi-trasparente
+    
+    # Testo del titolo con effetto glow
+    title_text = title_font.render("PAUSA", True, NEON_BLUE)
+    title_glow = title_font.render("PAUSA", True, (100, 100, 255))
+    
+    # Elementi del menù
+    menu_rect = pygame.Rect(0, 0, 400, 400)
+    menu_rect.center = (WIDTH//2, HEIGHT//2)
+    
+    # Pulsanti
+    resume_button = pygame.Rect(0, 0, 300, 60)
+    resume_button.center = (WIDTH//2, HEIGHT//2 - 30)
+    home_button = pygame.Rect(0, 0, 300, 60)
+    home_button.center = (WIDTH//2, HEIGHT//2 + 60)
+    
+    # Animazioni
+    angle = 0
+    menu_enter_sound.play()
+    
     while paused:
+        mouse_pos = pygame.mouse.get_pos()
+        angle += 2
+        current_time = pygame.time.get_ticks()
+        
+        # Disegna overlay
+        screen.blit(overlay, (0, 0))
+        
+        # Disegna bordo animato
+        border_surface = pygame.Surface((menu_rect.w+10, menu_rect.h+10), pygame.SRCALPHA)
+        pygame.draw.rect(border_surface, NEON_BLUE[0], (0, 0, border_surface.get_width(), border_surface.get_height()), 
+                         border_radius=20)
+        rotated_border = pygame.transform.rotate(border_surface, math.sin(angle*0.02)*3)
+        screen.blit(rotated_border, rotated_border.get_rect(center=menu_rect.center))
+        
+        # Disegna sfondo menù
+        pygame.draw.rect(screen, (0, 0, 30), menu_rect, border_radius=20)
+        pygame.draw.rect(screen, NEON_BLUE, menu_rect, 3, border_radius=20)
+        
+        # Effetto titolo
+        for i in range(5):
+            offset = math.sin(angle*0.02 + i)*3
+            screen.blit(title_glow, (WIDTH//2 - title_glow.get_width()//2 + offset, 
+                                    HEIGHT//3 - 50 + offset))
+        screen.blit(title_text, title_text.get_rect(center=(WIDTH//2, HEIGHT//3)))
+        
+        # Pulsante Resume
+        resume_color = NEON_GREEN if resume_button.collidepoint(mouse_pos) else (50, 50, 50)
+        pygame.draw.rect(screen, resume_color, resume_button, border_radius=15)
+        pygame.draw.rect(screen, NEON_GREEN, resume_button, 3, border_radius=15)
+        resume_label = button_font.render("RIPRENDI", True, WHITE)
+        screen.blit(resume_label, resume_label.get_rect(center=resume_button.center))
+        
+        # Pulsante Home
+        home_color = NEON_RED if home_button.collidepoint(mouse_pos) else (50, 50, 50)
+        pygame.draw.rect(screen, home_color, home_button, border_radius=15)
+        pygame.draw.rect(screen, NEON_RED, home_button, 3, border_radius=15)
+        home_label = button_font.render("TORNA ALLA HOME", True, WHITE)
+        screen.blit(home_label, home_label.get_rect(center=home_button.center))
+        
+        # Istruzioni
+        info_font = pygame.font.SysFont("Arial", 18)
+        info_text = info_font.render("Usa il mouse per selezionare le opzioni", True, WHITE)
+        screen.blit(info_text, info_text.get_rect(center=(WIDTH//2, HEIGHT - 50)))
+        
+        pygame.display.flip()
+        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit(); sys.exit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_p:
+                    menu_exit_sound.play()
                     paused = False
                 if event.key == pygame.K_h:
+                    menu_exit_sound.play()
                     paused = False
                     return_to_home = True
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
-                    if button_rect.collidepoint(event.pos):
+                    if resume_button.collidepoint(event.pos):
+                        menu_exit_sound.play()
+                        paused = False
+                    if home_button.collidepoint(event.pos):
+                        menu_exit_sound.play()
                         paused = False
                         return_to_home = True
-        screen.blit(background_image, (0, 0))
-        screen.blit(pause_text, pause_text.get_rect(center=(WIDTH // 2, HEIGHT // 3)))
-        screen.blit(cont_text, (WIDTH // 2 - cont_text.get_width() // 2, HEIGHT // 3 + 60))
-        screen.blit(home_text, (WIDTH // 2 - home_text.get_width() // 2, HEIGHT // 3 + 90))
-        pygame.draw.rect(screen, NEON_BLUE, button_rect)
-        button_label = pygame.font.SysFont("Arial", 24).render("Torna alla Home", True, WHITE)
-        screen.blit(button_label, button_label.get_rect(center=button_rect.center))
-        pygame.display.flip()
         clock.tick(FPS)
+    
     return return_to_home
 
 def main():
