@@ -12,7 +12,7 @@ class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         # Carica l'immagine del giocatore
-        self.original_image = load_image("assets/images/player.png", scale=(50, 50))
+        self.original_image = load_image("../assets/images/player.png", scale=(50, 50))
         if self.original_image is None:
             self.original_image = pygame.Surface((40, 40), pygame.SRCALPHA)
             pygame.draw.polygon(self.original_image, NEON_GREEN, [(20, 0), (0, 40), (40, 40)])
@@ -135,7 +135,7 @@ class Enemy(pygame.sprite.Sprite):
         super().__init__()
         self.is_boss = is_boss
         if not self.is_boss:
-            self.image = load_image("assets/images/enemy.png", scale=(30, 30))
+            self.image = load_image("../assets/images/enemy.png", scale=(30, 30))
             if self.image is None:
                 self.size = random.randint(20, 30)
                 self.image = pygame.Surface((self.size, self.size), pygame.SRCALPHA)
@@ -153,7 +153,7 @@ class Enemy(pygame.sprite.Sprite):
             raw_speed = base_speed + speed_increase + fire_speed_bonus
             self.speed = min(raw_speed, 5 * 0.9)
         else:
-            self.image = load_image("assets/images/boss.png", scale=(60, 60))
+            self.image = load_image("../assets/images/boss.png", scale=(60, 60))
             if self.image is None:
                 self.size = 60
                 self.image = pygame.Surface((self.size, self.size), pygame.SRCALPHA)
@@ -219,7 +219,7 @@ class Enemy(pygame.sprite.Sprite):
 class ShooterEnemy(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = load_image("assets/images/shooter.gif", scale=(80, 80))
+        self.image = load_image("../assets/images/shooter.gif", scale=(80, 80))
         if self.image is None:
             self.size = 80
             self.image = pygame.Surface((self.size, self.size), pygame.SRCALPHA)
@@ -300,7 +300,7 @@ class EnemyBullet(pygame.sprite.Sprite):
 class Heart(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = load_image("assets/images/heart.png", scale=(20, 20))
+        self.image = load_image("../assets/images/heart.png", scale=(20, 20))
         if self.image is None:
             self.image = pygame.Surface((20, 20), pygame.SRCALPHA)
             pygame.draw.polygon(self.image, NEON_RED, [(10, 0), (20, 7), (16, 18), (4, 18), (0, 7)])
@@ -315,7 +315,7 @@ class Heart(pygame.sprite.Sprite):
 class Snowflake(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = load_image("assets/images/snowflake.png", scale=(30, 30))
+        self.image = load_image("../assets/images/snowflake.png", scale=(30, 30))
         if self.image is None:
             self.image = pygame.Surface((30, 30), pygame.SRCALPHA)
             for angle in range(0, 360, 45):
@@ -335,7 +335,7 @@ class Snowflake(pygame.sprite.Sprite):
 class FirePower(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = load_image("assets/images/fire.png", scale=(30, 30))
+        self.image = load_image("../assets/images/fire.png", scale=(30, 30))
         if self.image is None:
             self.image = pygame.Surface((30, 30), pygame.SRCALPHA)
             pygame.draw.polygon(self.image, (255, 165, 0), [(15, 0), (5, 25), (15, 20), (25, 25)])
@@ -352,7 +352,7 @@ class FirePower(pygame.sprite.Sprite):
 class ShieldPower(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = load_image("assets/images/shield.png", scale=(30, 30))
+        self.image = load_image("../assets/images/shield.png", scale=(30, 30))
         if self.image is None:
             self.image = pygame.Surface((30, 30), pygame.SRCALPHA)
             pygame.draw.circle(self.image, (255, 215, 0), (15, 15), 15)

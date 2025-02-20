@@ -9,11 +9,11 @@ pygame.init()
 pygame.mixer.init()
 
 # Caricamento suoni – assegnali al modulo globals
-globals.sparo = pygame.mixer.Sound("assets/sounds/shot.mp3")
-globals.colonna_sonora = pygame.mixer.Sound("assets/sounds/colonna_sonora.mp3")
-globals.game_over_sound = pygame.mixer.Sound("assets/sounds/game_over.mp3")
-globals.menu_enter_sound = pygame.mixer.Sound("assets/sounds/menu_enter.mp3")
-globals.menu_exit_sound = pygame.mixer.Sound("assets/sounds/menu_exit.mp3")
+globals.sparo = pygame.mixer.Sound("../assets/sounds/shot.mp3")
+globals.colonna_sonora = pygame.mixer.Sound("../assets/sounds/colonna_sonora.mp3")
+globals.game_over_sound = pygame.mixer.Sound("../assets/sounds/game_over.mp3")
+globals.menu_enter_sound = pygame.mixer.Sound("../assets/sounds/menu_enter.mp3")
+globals.menu_exit_sound = pygame.mixer.Sound("../assets/sounds/menu_exit.mp3")
 
 # Impostazione della finestra di gioco
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -21,7 +21,7 @@ pygame.display.set_caption("Space Battle")
 clock = pygame.time.Clock()
 
 # Caricamento e ridimensionamento dell'immagine di sfondo
-background_image = pygame.image.load("assets/images/bg.png").convert()
+background_image = pygame.image.load("../assets/images/bg.png").convert()
 background_image = pygame.transform.scale(background_image, (WIDTH, HEIGHT))
 
 # Impostazione dei timer per lo spawn degli oggetti
@@ -42,7 +42,7 @@ def main():
     # Inizializzazione del giocatore e delle schermate
     globals.player = None
     home_screen()
-    pygame.mixer.music.load("assets/sounds/background.mp3")
+    pygame.mixer.music.load("../assets/sounds/background.mp3")
     pygame.mixer.music.play(-1)
     globals.kill_count = 0
     globals.next_fire_spawn = 50
